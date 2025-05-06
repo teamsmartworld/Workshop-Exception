@@ -16,37 +16,59 @@ public class CSVReader_Writer {
      * You should also close the Buffered reader in the finally block
      * @return List<String>of male firstnames
      */
-    public static List<String> getMaleFirstNames(){
+     public List<String> getMaleFirstNames() {
+         BufferedReader reader = null;
+         List<String> names = new ArrayList<>();
 
-        BufferedReader reader = null;
-        List <String> names = null;
+         try {
+             reader = new BufferedReader(new FileReader("male_first_names.txt"));
+             String line;
+             while ((line = reader.readLine()) != null) {
+                 if (!line.isEmpty()) {
+                     names.add(line);
+                 }
+             }
+         } catch (IOException e) {
+             // Handle the exception appropriately
+             System.out.println("Error reading file: " + e.getMessage());
+             throw new RuntimeException(e);
+         } finally {
+             if (reader != null) {
+                 try {
+                     reader.close();
+                 } catch (IOException e) {
+                     System.out.println("Error closing reader: " + e.getMessage());
+                 }
+             }
+         }
 
-
-        	reader = Files.newBufferedReader(Paths.get("firstname_males.txt"));
-            names = reader.lines()
-                    .flatMap(line -> Stream.of(line.split(",")))
-                    .collect(Collectors.toList());
-
-         	return names;
-        }
-
+         return names;
+     }
 
 
     /**
      * This method getFemaleFirstNames should make use of a try-catch with resources
      * @return
      */
-    public static List<String> getFemaleFirstNames(){
+    public List<String> getFemaleFirstNames() {
+        List<String> names = new ArrayList<>();
 
-        List<String> names=null;
-
-            BufferedReader reader = Files.newBufferedReader(Paths.get("firstname_female.txt"))
-                names = reader.lines()
-                        .flatMap(line -> Stream.of(line.split(",")))
-                        .collect(Collectors.toList());
+        try (BufferedReader reader = new BufferedReader(new FileReader("female_first_names.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    names.add(line);
+                }
+            }
+        } catch (IOException e) {
+            // Handle the exception appropriately
+            System.out.println("Error reading file: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
 
         return names;
     }
+
 
 
     /**
@@ -56,35 +78,38 @@ public class CSVReader_Writer {
      * @return List <String> of last names
      * @throws IOException
      */
-    public static List<String> getLastNames() throws IOException{
+    public List<String> getLastNames() throws IOException {
+        List<String> lastNames = new ArrayList<>();
 
-        List<String> names = null;
-        BufferedReader reader = null;
-
-        try{
-                reader = Files.newBufferedReader(Paths.get("lastnames.txt"));
-                names = reader.lines()
-                .flatMap(line -> Stream.of(line.split(",")))
-                .collect(Collectors.toList());
-
-
-        }finally{
-            if(reader != null){
-                reader.close();
+        try (BufferedReader reader = new BufferedReader(new FileReader("lastnames.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    lastNames.add(line);
+                }
             }
         }
-        return names;
+
+        return lastNames;
     }
 
 
-    public static void saveLastNames(List <String> lastNames){
-
-            BufferedWriter writer = Files.newBufferedWriter(Paths.get("lastnames.txt"));
-            for(String toWrite : lastNames){
-                writer.append(toWrite+",");
+    /**
+     * Saves a list of last names to a file.
+     *
+     * @param lastNames the list of last names to save
+     * @throws IOException if there's an error writing to the file
+     */
+    public static void saveLastNames(List<String> lastNames) throws IOException {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("lastnames.txt"))) {
+            for (String toWrite : lastNames) {
+                writer.append(toWrite);
+                writer.append(",");
             }
             writer.flush();
-      }
+        }
+    }
+
 
     public static void saveFemaleNames(List <String> femaleNames){
         BufferedWriter writer = Files.newBufferedWriter(Paths.get("firstname_female.txt"));
