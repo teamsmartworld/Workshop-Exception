@@ -111,26 +111,36 @@ public class CSVReader_Writer {
     }
 
 
-    public static void saveFemaleNames(List <String> femaleNames){
-        BufferedWriter writer = Files.newBufferedWriter(Paths.get("firstname_female.txt"));
-            for(String toWrite : femaleNames){
-                writer.append(toWrite+",");
+    /**
+     * Saves a list of female names to a file.
+     *
+     * @param femaleNames the list of female names to save
+     * @throws IOException if there's an error writing to the file
+     */
+    public static void saveFemaleNames(List<String> femaleNames) throws IOException {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("firstname_female.txt"))) {
+            for (String toWrite : femaleNames) {
+                writer.append(toWrite);
+                writer.append(",");
             }
             writer.flush();
-
+        }
     }
 
 
-
-    public static void saveMaleNames(List <String> maleNames){
-        BufferedWriter writer = Files.newBufferedWriter(Paths.get("firstname_males.txt"));
-            for(String toWrite : maleNames){
-                writer.append(toWrite+",");
+    /**
+     * Saves a list of male names to a file.
+     *
+     * @param maleNames the list of male names to save
+     * @throws IOException if there's an error writing to the file
+     */
+    public static void saveMaleNames(List<String> maleNames) throws IOException {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("firstname_males.txt"))) {
+            for (String toWrite : maleNames) {
+                writer.append(toWrite);
+                writer.append(",");
             }
             writer.flush();
-
-
+        }
     }
-
-
 }
